@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="login_div" class="main-div">
+      <h2 style="text-align: center; letter-spacing: 1px">
+        Welcome, Manikanta
+      </h2>
+      <br />
+      <input type="email" placeholder="Email..." id="email_field" />
+      <input type="password" placeholder="Password..." id="password_field" />
+
+      <button onclick="login()">Login</button>
+    </div>
+
+    <div class="container" id="user_div">
+      <header style="display: flex;justify-content: space-between;">
+        <h3>Threads</h3>
+        <h3 style="cursor: pointer" onclick="logout()">Logout</h3>
+      </header>
+      <div class="table-wrapper">
+        <table class="table-users">
+          <tr>
+            <th>Name</th>
+            <th>Date</th>
+            <th>Link</th>
+            <th>Actions</th>
+          </tr>
+        </table>
+        <button class="btn btn-add">Add Thread</button>
+      </div>
+      <!-- Add Modal -->
+      <div class="add-modal modal-wrapper">
+        <div class="modal">
+          <div class="modal-header"><h3>Add New Thread</h3></div>
+          <div class="modal-body">
+            <form class="form" autocomplete="off">
+              <input type="text" name="name" placeholder="Enter Name" />
+              <input type="date" name="date" placeholder="Enter Date" />
+              <input type="string" name="link" placeholder="Enter Link" />
+              <button class="btn btn-modal">Submit</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Edit Modal -->
+      <div class="edit-modal modal-wrapper">
+        <div class="modal">
+          <div class="modal-header"><h3>Edit Thread</h3></div>
+          <div class="modal-body">
+            <form class="form" autocomplete="off">
+              <input type="text" name="name" placeholder="Enter Name" />
+              <input type="date" name="date" placeholder="Enter Date" />
+              <input type="string" name="link" placeholder="Enter Link" />
+              <button class="btn btn-modal">Submit</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.0.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.1/firebase-auth.js"></script>
+
+    <script>
+      // Your web app's Firebase configuration
+      var firebaseConfig = {
+        apiKey: "AIzaSyD0m8GuVn15AO1FMMdavIBf3XmkSD8ipYE",
+        authDomain: "twitter-timeline-7061d.firebaseapp.com",
+        databaseURL: "https://twitter-timeline-7061d.firebaseio.com",
+        projectId: "twitter-timeline-7061d",
+        storageBucket: "twitter-timeline-7061d.appspot.com",
+        messagingSenderId: "325130161653",
+        appId: "1:325130161653:web:08c6b1a8bcc3ec268524bc",
+      };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      const db = firebase.firestore();
+
+      // Firebase Authentication
+      function login() {
+        var userEmail = document.getElementById("email_field").value;
+        var userPass = document.getElementById("password_field").value;
+        firebase
+          .auth()
+          .signInWithEmailAndPassword(userEmail, userPass)
+          .catch(function (error) {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            window.alert("Error : " + errorMessage);
+          });
+      }
+
+      function logout() {
+        firebase.auth().signOut();
+      }
+
+      firebase.auth().onAuthStateChanged(function (user) {
+        if (user) {
+          // User is signed in.
+          document.getElementById("user_div").style.display = "block";
+          document.getElementById("login_div").style.display = "none";
+          var user = firebase.auth().currentUser;
+        } else {
+          // No user is signed in.
+          document.getElementById("user_div").style.display = "none";
+          document.getElementById("login_div").style.display = "block";
+        }
+      });
+
+    </script>
+    <script src="./script.js"></script>
+  </body>
+</html>
